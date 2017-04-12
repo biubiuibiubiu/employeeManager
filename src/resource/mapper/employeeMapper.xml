@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vcmy.dao.EmployeeDao">
+	<resultMap type="com.vcmy.bean.Employee" id="employee">
+		<association property="dep" column="dep_id"
+			javaType="com.vcmy.bean.Department" select="getDepById" />
+	</resultMap>
+	<select id="getEmpById" resultMap="employee" parameterType="String">
+		select * from employee where
+		emp_id=#{emp_id}
+	</select>
+	<select id="getDepById" resultType="com.vcmy.bean.Department">
+		select * from department
+		where dep_id=#{dep_id}
+	</select>
+	<insert id="addEmp" parameterType="com.vcmy.bean.Employee">
+		insert into employee
+		values(#{emp_id},#{name},#{age},#{time},#{dep.dep_id})
+	</insert>
+	<select id="getAllEmp" resultMap="employee">
+		select * from employee
+	</select>
+	<select id="getEmpByDep" parameterType="com.vcmy.bean.Department"
+		resultMap="employee">
+		select * from employee
+		e,department d where
+		e.dep_id=#{dep_id} and
+		d.dep_id=e.dep_id
+	</select>
+	<update id="updateEmp" parameterType="com.vcmy.bean.Employee">
+		update employee set
+		emp_id=#{emp_id},name=#{name},age=#{age},time=#{time},dep_id=#{dep.dep_id}
+		where
+		emp_id=#{emp_id}
+	</update>
+	<delete id="deleteEmp" parameterType="com.vcmy.bean.Employee">
+		delete from employee where
+		emp_id=#{emp_id}
+	</delete>
+</mapper>
